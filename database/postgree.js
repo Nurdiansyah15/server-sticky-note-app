@@ -1,6 +1,8 @@
 const { Sequelize } = require("sequelize");
 
-const sequelize = new Sequelize(process.env.POSTGREE_CONN);
+const sequelize = new Sequelize(process.env.POSTGREE_CONN, {
+  dialectModule: require("pg"),
+});
 
 (async () => {
   try {
