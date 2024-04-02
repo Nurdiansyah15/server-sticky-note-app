@@ -1,8 +1,6 @@
 const { Sequelize } = require("sequelize");
 
-const sequelize = new Sequelize(
-  "postgres://default:e0myQVxOiXf8@ep-still-tooth-a1g004t1.ap-southeast-1.aws.neon.tech:5432/verceldb?sslmode=require"
-);
+const sequelize = new Sequelize(process.env.POSTGREE_CONN);
 
 (async () => {
   try {
