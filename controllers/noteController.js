@@ -76,13 +76,16 @@ exports.update = async (req, res) => {
     if (title === "") req.body.title = "Untitled";
     if (content === "") req.body.description = "Add text here";
 
-    const note = await Note.update(
+    await Note.update(
       {
         title: title,
         content: content,
       },
       { where: { id: noteId } }
     );
+
+    const note = await Note.findOne({ where: { id: noteId } });
+
     res.status(200).json(note);
   } catch (err) {
     res.status(500).json(err);
