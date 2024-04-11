@@ -10,6 +10,7 @@ var sequelize = require("./database/postgree");
 
 var indexRouter = require("./routes/index");
 var noteRouter = require("./routes/api/note");
+var authRouter = require("./routes/api/auth");
 
 var app = express();
 
@@ -22,5 +23,6 @@ app.use(express.static(path.join(__dirname, "public")));
 
 app.use("/", indexRouter);
 app.use("/api", noteRouter);
+app.use("/api", authRouter);
 
 module.exports = app;

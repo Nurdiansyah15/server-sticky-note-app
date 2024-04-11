@@ -9,10 +9,10 @@ exports.create = async (req, res) => {
     const note = await Note.create({
       title: req.body.title,
       content: req.body.content,
+      userId: req.user.id,
     });
     res.status(201).json(note);
   } catch (err) {
-    console.log(err);
     res.status(500).json(err);
   }
 };
@@ -30,7 +30,6 @@ exports.search = async (req, res) => {
     });
     res.status(200).json(note);
   } catch (err) {
-    console.log(err);
     res.status(500).json(err);
   }
 };
@@ -44,22 +43,18 @@ exports.getAll = async (req, res) => {
   }
 };
 
-// exports.updatePosition = async (req, res) => {
-//   const { boards } = req.body;
-//   try {
-//     for (const key in boards.reverse()) {
-//       const board = boards[key];
-//       await Board.findByIdAndUpdate(board.id, { $set: { position: key } });
-//     }
-//     res.status(200).json("updated");
-//   } catch (err) {
-//     res.status(500).json(err);
-//   }
-// };
+exports.getAllByUserId = async (req, res) => {
+  const userId = req.user.id;
+  try {
+    const note = await Note.findAll({ where: { userId: userId } });
+    res.status(200).json(note);
+  } catch (err) {
+    res.status(500).json(err);
+  }
+};
 
 exports.getOne = async (req, res) => {
   const { noteId } = req.params;
-  console.log(noteId);
   try {
     const note = await Note.findOne({ where: { id: noteId } });
     res.status(200).json(note);
@@ -92,6 +87,30 @@ exports.update = async (req, res) => {
   }
 };
 
+exports.delete = async (req, res) => {
+  const { noteId } = req.params;
+  try {
+    await Note.destroy({ where: { id: noteId } });
+
+    res.status(200).json("deleted");
+  } catch (err) {
+    res.status(500).json(err);
+  }
+};
+
+// exports.updatePosition = async (req, res) => {
+//   const { boards } = req.body;
+//   try {
+//     for (const key in boards.reverse()) {
+//       const board = boards[key];
+//       await Board.findByIdAndUpdate(board.id, { $set: { position: key } });
+//     }
+//     res.status(200).json("updated");
+//   } catch (err) {
+//     res.status(500).json(err);
+//   }
+// };
+
 // exports.getFavourites = async (req, res) => {
 //   try {
 //     const favourites = await Board.find({
@@ -118,14 +137,3 @@ exports.update = async (req, res) => {
 //     res.status(500).json(err);
 //   }
 // };
-
-exports.delete = async (req, res) => {
-  const { noteId } = req.params;
-  try {
-    await Note.destroy({ where: { id: noteId } });
-
-    res.status(200).json("deleted");
-  } catch (err) {
-    res.status(500).json(err);
-  }
-};
